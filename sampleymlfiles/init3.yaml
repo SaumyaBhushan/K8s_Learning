@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: simple-pod1
+  labels:
+    purpose: initContainers-demo
+spec:
+  initContainers:
+  - name: init-busybox1
+    image: busybox
+    command: ["sh","echo","I am init-conatiner"]
+  - name: init-busybox2
+    image: busybox
+    command: ["sleep","30"]
+
+  containers:
+  - name: main-busybox
+    image: busybox
+    command: ["sh","echo","Hello main container"]
+  restartPolicy: Never

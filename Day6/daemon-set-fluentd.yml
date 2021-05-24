@@ -1,0 +1,20 @@
+apiVersion : apps/v1
+kind : DaemonSet
+metadata : 
+  name : fluentd-ds
+  labels :
+    app : fluentd-app
+  annotations :
+    author : Saumya
+spec :
+  selector : 
+    matchLabels:
+      name : fluentd
+  template :
+    metadata :
+      labels :
+        name : fluentd
+    spec :
+      containers :
+      - name : fluentd1
+        image : fluent/fluentd

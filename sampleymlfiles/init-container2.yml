@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: ConfigMap                       
+metadata:
+  name: cfg
+data:
+  version: v1.0.0
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod
+spec:
+  volumes:
+  - name: config-volume               
+    emptyDir: {}
+  initContainers:
+  - name: clone
+    image: alpine/git:1.0.4           
+    volumeMounts:
+    - name: config-volume
+      mountPath: /config              
+    envFrom:
+      - configMapRef:
+          name: cfg                   
+    command: ['/bin/sh', '-c']  
+    args: ['git clone --branch $(version) https://github.com/ajavageek/foo-config && mv foo-config/* /config']
+  containers:
+  - name: foo
+    image: ajavageek/foo:1.0          
+    volumeMounts:
+    - name: config-volume
+      mountPath: /config              
+      readOnly: true  

@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: sample-website
+spec:
+  initContainers:
+    - name: clone-repo
+      image: alpine/git
+      command:
+        - git
+        - clone
+        - --progress
+        - https://github.com/SaumyaBhushan/KIP_HTML_Assignment.git
+        - /usr/share/nginx/html
+      volumeMounts:
+        - name: web-app-volume
+          mountPath: "/usr/share/nginx/html"
+  containers:
+    - name: web-server
+      image: nginx
+      ports:
+        - name: http
+          containerPort: 80
+      volumeMounts:
+        - name: web-app-volume
+          mountPath: "/usr/share/nginx/html"
+  volumes:
+    - name: web-app-volume
+      emptyDir: {}
